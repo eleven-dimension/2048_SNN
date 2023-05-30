@@ -1,0 +1,8 @@
+﻿  Building Custom Rule C:/Users/31772/Desktop/2048_N_tuple_network/CMakeLists.txt
+  board.cpp
+  pattern.cpp
+  policy.cpp
+C:\Users\31772\Desktop\2048_N_tuple_network\src\policy.cpp(101,48): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+  test_board.cpp
+  正在生成代码...
+  test_board.vcxproj -> C:\Users\31772\Desktop\2048_N_tuple_network\build\Debug\test_board.exe
