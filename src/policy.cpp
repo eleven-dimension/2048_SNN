@@ -8,7 +8,7 @@
 void Policy::add_pattern(std::vector<int> pattern_positions)
 {
     Pattern p(pattern_positions);
-    this->patterns.push_back(p);
+    this->patterns.emplace_back(p);
 }
 
 float Policy::get_state_val(Board board)
@@ -18,7 +18,7 @@ float Policy::get_state_val(Board board)
     for (int time = 0; time < 4; time++)
     {
         board.rotate(time);
-        for (auto pattern : this->patterns)
+        for (auto& pattern : this->patterns)
         {
             val += pattern.get_pattern_value(board);
         }
@@ -29,7 +29,7 @@ float Policy::get_state_val(Board board)
     for (int time = 0; time < 4; time++)
     {
         board.rotate(time);
-        for (auto pattern : this->patterns)
+        for (auto& pattern : this->patterns)
         {
             val += pattern.get_pattern_value(board);
         }
@@ -105,7 +105,7 @@ void Policy::update_pattern_table(
     for (int time = 0; time < 4; time++)
     {
         board.rotate(time);
-        for (auto pattern : this->patterns)
+        for (auto& pattern : this->patterns)
         {
             pattern.update_pattern_value(board, pattern_target_value, learning_rate);
         }
@@ -116,7 +116,7 @@ void Policy::update_pattern_table(
     for (int time = 0; time < 4; time++)
     {
         board.rotate(time);
-        for (auto pattern : this->patterns)
+        for (auto& pattern : this->patterns)
         {
             pattern.update_pattern_value(board, pattern_target_value, learning_rate);
         }
