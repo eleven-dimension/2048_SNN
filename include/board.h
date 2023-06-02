@@ -4,11 +4,24 @@
 #include <iostream>
 #include <string>
 
+enum struct MoveDirection
+{
+    Up, Right, Down, Left
+};
+
 class Board
 {
 public:
-    Board() { this->max_tile = 4096;};
-    Board(int max_tile_val) { this->max_tile = max_tile_val; };
+    Board() = default;
+    Board(const std::bitset<64>& board_map) {this->bit_map = board_map;};
+
+    // operator
+    Board& operator =(const Board& b) = default;
+    bool operator ==(const Board& b) const { return this->bit_map == b.bit_map; }
+    bool operator !=(const Board& b) const { return !(*this == b); }
+
+    // set bitmap value
+    void set_bitmap(const std::bitset<64>& board_map);
 
     // print board map
     void print();
@@ -64,29 +77,15 @@ public:
     int shift_to_left();
 
     // four moves
-    // return pair<board state, score>
-    std::pair<std::bitset<64>, int> move_up();
-    std::pair<std::bitset<64>, int> move_right();
-    std::pair<std::bitset<64>, int> move_down();
-    std::pair<std::bitset<64>, int> move_left();
+    // return score
+    int move_up();
+    int move_right();
+    int move_down();
+    int move_left();
 
-    // valid action mask
-    void get_valid_action_mask(bool mask[]);
+    // parameter: move direction enum
+    int move_with_direction(MoveDirection move_direction);
 
-    // [0, 3]
-    int random_valid_action(bool mask[]);
-
-    // check lose
-    bool check_lose();
-
-    // check win
-    bool check_win();
-
-    // member var
+    // member variable
     std::bitset<64> bit_map;
-    int max_tile;
-
-    // env step
-    // action: [0, 3]
-    std::pair<int, std::string> next_turn(int action);
 };
