@@ -1,6 +1,7 @@
 #include "../include/board.h"
 #include "../include/pattern.h"
 #include "../include/policy.h"
+#include "../include/move.h"
 
 #include <iostream>
 #include <string>
@@ -30,9 +31,14 @@ int main()
 
     board.print();
 
-    // cout << policy.get_state_val(board);
+    auto move = policy.get_best_action(board);
 
-    auto [action, value, afterstate] = policy.get_best_action(board);
-    cout << action << endl;
-    cout << value << endl;
+    auto before_board = move.before_board;
+    before_board.print();
+    auto next_board = move.after_board;
+    next_board.print();
+
+    cout << int(move.direction) << endl;
+    cout << move.score << endl;
+    cout << move.move_value << endl;
 }
