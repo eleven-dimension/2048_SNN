@@ -1,3 +1,0 @@
-﻿  test_pattern.cpp
-C:\Users\31772\Desktop\2048_N_tuple_network\test\test_pattern.cpp(28,43): warning C4305: “参数”: 从“double”到“float”截断
-  test_pattern.vcxproj -> C:\Users\31772\Desktop\2048_N_tuple_network\build\Debug\test_pattern.exe

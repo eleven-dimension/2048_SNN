@@ -1,7 +1,0 @@
-C:/Users/31772/Desktop/2048_N_tuple_network/build/CMakeFiles/test_board.dir
-C:/Users/31772/Desktop/2048_N_tuple_network/build/CMakeFiles/test_pattern.dir
-C:/Users/31772/Desktop/2048_N_tuple_network/build/CMakeFiles/test_play_games.dir
-C:/Users/31772/Desktop/2048_N_tuple_network/build/CMakeFiles/test_policy.dir
-C:/Users/31772/Desktop/2048_N_tuple_network/build/CMakeFiles/test_train_loop.dir
-C:/Users/31772/Desktop/2048_N_tuple_network/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/31772/Desktop/2048_N_tuple_network/build/CMakeFiles/ZERO_CHECK.dir
