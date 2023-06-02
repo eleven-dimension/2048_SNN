@@ -6,6 +6,10 @@
 
 using ull = unsigned long long;
 
+void Board::set_bitmap(const std::bitset<64>& board_map)
+{
+    this->bit_map = board_map;
+}
 
 void Board::print()
 {
@@ -148,9 +152,9 @@ int Board::merge_tiles(int tiles_val[])
         {
             if (last_tile_val == tiles_val[i])
             {
-                last_tile_val++;
-                tiles_val[tiles_val_index - 1] = last_tile_val;
-                score += (1 << last_tile_val);
+                tiles_val[tiles_val_index - 1] = tiles_val[i] + 1;
+                last_tile_val = 0;
+                score += (1 << (tiles_val[i] + 1));
             }
             else
             {
@@ -216,158 +220,61 @@ int Board::shift_to_left()
     return score;
 }
 
-std::pair<std::bitset<64>, int> Board::move_up()
+int Board::move_up()
 {
-    Board new_board;
-    new_board.bit_map = this->bit_map;
-
-    new_board.rotate_left();
+    this->rotate_left();
     // move to left
-    int score = new_board.shift_to_left();
+    int score = this->shift_to_left();
+    this->rotate_right();
 
-    new_board.rotate_right();
-
-    return {new_board.bit_map, score};
+    return score;
 }
 
-std::pair<std::bitset<64>, int> Board::move_right()
+int Board::move_right()
 {
-    Board new_board;
-    new_board.bit_map = this->bit_map;
-
-    new_board.horizontal_reflection();
+    this->horizontal_reflection();
     // move to left
-    int score = new_board.shift_to_left();
+    int score = this->shift_to_left();
+    this->horizontal_reflection();
 
-    new_board.horizontal_reflection();
-
-    return {new_board.bit_map, score};
+    return score;
 }
 
-std::pair<std::bitset<64>, int> Board::move_down()
+int Board::move_down()
 {
-    Board new_board;
-    new_board.bit_map = this->bit_map;
-
-    new_board.rotate_right();
+    this->rotate_right();
     // move to left
-    int score = new_board.shift_to_left();
+    int score = this->shift_to_left();
+    this->rotate_left();
 
-    new_board.rotate_left();
-
-    return {new_board.bit_map, score};
+    return score;
 }
 
 
-std::pair<std::bitset<64>, int> Board::move_left()
+int Board::move_left()
 {
-    Board new_board;
-    new_board.bit_map = this->bit_map;
-
     // move to left
-    int score = new_board.shift_to_left();
-
-    return {new_board.bit_map, score};
+    int score = this->shift_to_left();
+    return score;
 }
 
-// 0: up, 1: right, 2: down, 3: left
-void Board::get_valid_action_mask(bool mask[])
+int Board::move_with_direction(MoveDirection move_direction)
 {
-    auto bit_map = this->move_up().first;
-    mask[0] = !(bit_map == this->bit_map);
-
-    bit_map = this->move_right().first;
-    mask[1] = !(bit_map == this->bit_map);
-
-    bit_map = this->move_down().first;
-    mask[2] = !(bit_map == this->bit_map);
-
-    bit_map = this->move_left().first;
-    mask[3] = !(bit_map == this->bit_map);
-}
-
-// ensure mask not all False
-int Board::random_valid_action(bool mask[])
-{
-    int valid_actions[4];
-    int valid_action_num = 0;
-
-    for (int i = 0; i < 4; i++)
+    int score = 0;
+    switch (move_direction)
     {
-        if (mask[i])
-        {
-            valid_actions[valid_action_num++] = i;
-        }
+    case MoveDirection::Up:
+        score = this->move_up();
+        break;
+    case MoveDirection::Right:
+        score = this->move_right();
+        break;
+    case MoveDirection::Down:
+        score = this->move_down();
+        break;
+    case MoveDirection::Left:
+        score = this->move_left();
+        break;
     }
-
-    return valid_actions[rand() % valid_action_num];
-}
-
-// check lose
-bool Board::check_lose()
-{
-    bool valid_action_mask[4];
-    this->get_valid_action_mask(valid_action_mask);
-
-    for (int i = 0; i < 4; i++)
-    {
-        if (valid_action_mask[i]) return false;
-    }
-    return true;
-}
-
-bool Board::check_win()
-{
-    for (int i = 0; i < 16; i++)
-    {
-        if ((1 << this->get_tile_val(i)) == this->max_tile) 
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-std::pair<int, std::string> Board::next_turn(int action)
-{
-    int move_score = 0;
-    if (action == 0)
-    {
-        auto [bit_map, score] = this->move_up();
-        this->bit_map = bit_map;
-        move_score = score;
-    }
-    else if (action == 1)
-    {
-        auto [bit_map, score] = this->move_right();
-        this->bit_map = bit_map;
-        move_score = score;
-    }
-    else if (action == 2)
-    {
-        auto [bit_map, score] = this->move_down();
-        this->bit_map = bit_map;
-        move_score = score;
-    }
-    else
-    {
-        auto [bit_map, score] = this->move_left();
-        this->bit_map = bit_map;
-        move_score = score;
-    }
-    
-    if (this->check_win())
-    {
-        return {move_score, "win"};
-    }
-
-    this->generate_one_new_tile();
-    bool lose_flag = this->check_lose();
-
-    if (lose_flag)
-    {
-        return {move_score, "lose"};
-    }
-    return {move_score, "play"};
+    return score;
 }
