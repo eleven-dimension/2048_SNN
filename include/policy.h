@@ -9,23 +9,25 @@
 
 #include "../include/board.h"
 #include "../include/pattern.h"
+#include "../include/move.h"
+
 
 class Policy
 {
 public:
     Policy() {};
 
-    void add_pattern(std::vector<int> pattern_positions);
-    float get_state_val(Board board);
+    void add_pattern(std::array<int, 6> pattern_positions);
+    float get_state_val(Board& board);
     
     // return {action, action_val (= r + v(s'))}
-    std::tuple<int, float, std::bitset<64>> get_best_action(Board board);
+    Move get_best_action(Board& board);
 
     // update table
-    void update_pattern_table(
-        Board board, float network_output_value, float state_target_value, float learning_rate
-    );
+    float update_pattern_table(Board& board, float adjust);
 
-    // variables
+    void learn_from_episode(std::vector<Move>& path, float alpha = 0.05);
+
+    // member variables
     std::vector<Pattern> patterns;
 };
